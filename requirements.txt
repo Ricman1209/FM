@@ -1,4 +1,21 @@
+#Librerias para el funcionamineto del backend
 fastapi
 uvicorn 
 python-dotenv
 pydantic
+httpx
+
+#Librerias para el manejo de archivos
+python-docx
+docxtpl
+PyMuPDF
+pypandoc
+
+#almacenamiento
+#SQLAlchemy
+#databases
+#psycopg2-binary
+#langchain
+#python-magic
+#docker
+
