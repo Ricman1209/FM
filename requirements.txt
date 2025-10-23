@@ -8,9 +8,16 @@ httpx
 #Librerias para el manejo de archivos
 python-docx
 docxtpl
+PyPDF2
 PyMuPDF
 pypandoc
+python-multipart # lee y decodifica los archivos enviados
 
+
+
+
+
+#OPCIONALES O PENDIENTES:
 #almacenamiento
 #SQLAlchemy
 #databases
