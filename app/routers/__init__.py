@@ -1,3 +1,3 @@
 # __init__.py
-# Marca el directorio 'app' como un paquete Python.
-# Aquí inicia la lógica principal del proyecto FM (Factory Manuals).
+# Indica que 'routers' es un paquete de rutas de la API.
+# Cada archivo en esta carpeta define endpoints específicos (por ejemplo, documents_router).
