@@ -1,8 +1,14 @@
 from fastapi import FastAPI
-from app.routers import documents_router
+from routers import PortadaRouter
 
-app = FastAPI(title="FM 0.1", description="Version test para extracción texto en documentos Word")
+app = FastAPI(
+    title="Generador de Manuales",
+    description="Api para generar el formato correcto a un documentación word básica",
+    version="0.1"
+)
 
-#registrar rutas 
-app.include_router(documents_router.router)
+app.include_router(PortadaRouter.router)
 
+@app.get("/")
+def root():
+    return{"message":"Api lista"}
