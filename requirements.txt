@@ -8,6 +8,8 @@ httpx
 #Librerias para el manejo de archivos
 python-docx
 docxtpl
+docxcompose
+
 PyPDF2
 PyMuPDF
 pypandoc
