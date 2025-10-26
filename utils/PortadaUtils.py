@@ -6,21 +6,22 @@ from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from prompt.portadaPrompt import Title
+from prompt.prompts_ejemplo import Title
+
+def generarPortada():
+    doc = DocxTemplate("templates/portada_manuales_techxagon.docx")
 
 
-
-doc = DocxTemplate("templates/portada_manuales_techxagon.docx")
-
-
-context = {
+    context = {
     "Project_name" : Title,
     "date" : datetime.now().strftime(format="%d/%m/%Y"),
     "versión" : "1.0"
-}
+    }
 
-jinja2_env = jinja2.Environment(autoescape=True)
-doc.render(context , jinja2_env)
-doc.save("templates/nuevoword.docx")
+
+    doc.render(context)
+    doc.save("templates/word_portada_funcion.docx")
+
+generarPortada()
 
 
