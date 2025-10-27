@@ -7,7 +7,6 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from prompt.PromptTitulo import Title
 
-
 def generarPortada():
     doc = DocxTemplate("templates/portada_manuales_techxagon.docx")
 
@@ -20,7 +19,7 @@ def generarPortada():
 
 
     doc.render(context)
-    doc.save("templates/word_portada_funcion.docx")
+    doc.save("uploads/portada_automatica.docx")
 
 generarPortada()
 

@@ -2,7 +2,7 @@ from ollama import chat
 from utils.LeerDocumento import leer_manual
 
 
-manual_text = leer_manual()
+texto_manual = leer_manual()
 
 
 response = chat(
@@ -19,11 +19,9 @@ response = chat(
         },
         {
             "role": "user",
-            "content": f"dime que titulo le podria poner a este manual:\n\n{manual_text}"
+            "content": f"dime que titulo le podria poner a este manual:\n\n{texto_manual}"
         }
     ]
 )
 
 Title = response.message.content
-print("Resumen generado por IA:")
-print(Title)
