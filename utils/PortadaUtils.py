@@ -1,12 +1,12 @@
 from docxtpl import DocxTemplate
-import jinja2
 from datetime import datetime
 
 from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from prompt.prompts_ejemplo import Title
+from prompt.PromptTitulo import Title
+
 
 def generarPortada():
     doc = DocxTemplate("templates/portada_manuales_techxagon.docx")
@@ -23,5 +23,4 @@ def generarPortada():
     doc.save("templates/word_portada_funcion.docx")
 
 generarPortada()
-
 
