@@ -15,16 +15,6 @@ PyMuPDF
 pypandoc
 python-multipart # lee y decodifica los archivos enviados
 
-
-
-
-
-#OPCIONALES O PENDIENTES:
-#almacenamiento
-#SQLAlchemy
-#databases
-#psycopg2-binary
-#langchain
-#python-magic
-#docker
+diagrams
+#npm install -g @mermaid-js/mermaid-cli
 
