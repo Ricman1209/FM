@@ -53,9 +53,5 @@ for item in Glosario:
     if "signado" in item:
         item["significado"] = item.pop("signado")
 
-print("✅ Glosario procesado correctamente.")
-#Parche dado por IA--------------------------------------------------------
-print("🔎 Respuesta completa de la IA:")
-print(response.message.content)
 
 
