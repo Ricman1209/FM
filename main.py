@@ -1,49 +1,10 @@
-from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+from fastapi import FastAPI
+from routers.manualRouter import router as manual_router
 
-# Importar solo esta función primero (para preparar Manual.docx)
-from utils.SubirManualUtils import subir_manual_automatico
+app = FastAPI(title="FM API")
 
+app.include_router(manual_router)
 
-def main():
-    print("🚀 Iniciando generación automática de manual...\n")
-
-    # 0️⃣ Copiar el último archivo de archivo_original/ a templates/Manual.docx
-    try:
-        subir_manual_automatico()
-    except Exception as e:
-        print(f"❌ Error al preparar el documento base: {e}")
-        return
-
-    # ✅ Solo después de tener Manual.docx, importamos los demás módulos
-    from utils.PortadaUtils import generarPortada
-    from utils.GlosarioUtils import generarGlosario
-    from utils.SecciónIntroductorioUtils import generarSecciónIntroductoria
-    from utils.UnirDocumentosUtils import preparar_y_unir
-    from utils.DiagramaUtils import generar_diagrama_mermaid, insertar_diagrama_en_docx
-
-
-    # 1️⃣ Generar portada
-    generarPortada()
-    print("✅ Portada generada correctamente.\n")
-
-    # 2️⃣ Generar sección introductoria
-    generarSecciónIntroductoria()
-    print("✅ Sección introductoria generada correctamente.\n")
-
-    # 3️⃣ Generar glosario
-    generarGlosario()
-    print("✅ Glosario generado correctamente.\n")
-
-    ruta_png = generar_diagrama_mermaid()
-    insertar_diagrama_en_docx(ruta_png)
-    print("✅ Diagrama generado e insertado correctamente.\n")
-
-    # 4️⃣ Unir todo
-    preparar_y_unir()
-    print("\n🎉 Manual completo generado exitosamente en 'uploads/manual_final.docx'")
-
-
-if __name__ == "__main__":
-    main()
+@app.get("/")
+def root():
+    return {"message": "🚀 Servidor FM corriendo correctamente"}

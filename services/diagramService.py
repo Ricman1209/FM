@@ -8,10 +8,21 @@ from docx import Document
 from docx.shared import Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from PIL import Image
-from prompt.PromptDiagrama import titulo_diagrama, pasos_diagrama
+from prompt.PromptDiagrama import generar_datos_diagrama
 
 
 def generar_diagrama_mermaid():
+    """
+    Genera el diagrama Mermaid (PNG) en base a los pasos generados por Ollama.
+    """
+    datos = generar_datos_diagrama()
+    titulo_diagrama = datos["titulo_diagrama"]
+    pasos_diagrama = datos["pasos_diagrama"]
+
+    if not pasos_diagrama:
+        print("⚠️ No se generaron pasos para el diagrama.")
+        return None
+
     # 1️⃣ Crear contenido Mermaid dinámico
     contenido = "flowchart TD\n"
     contenido += f'    A[Inicio] --> B["{pasos_diagrama[0]}"]\n'
@@ -34,7 +45,7 @@ def generar_diagrama_mermaid():
     with open(ruta_mmd, "w", encoding="utf-8") as f:
         f.write(contenido)
 
-    # 3️⃣ Ruta absoluta del ejecutable mmdc.cmd
+    # 3️⃣ Ruta del ejecutable de Mermaid CLI
     ruta_mmdc = r"C:\Users\moral\AppData\Roaming\npm\mmdc.cmd"
 
     if not Path(ruta_mmdc).exists():
@@ -69,15 +80,17 @@ def insertar_diagrama_en_docx(ruta_png):
 
     # 📄 Crear documento
     doc = Document()
+    datos = generar_datos_diagrama()
+    titulo_diagrama = datos["titulo_diagrama"]
+
     doc.add_heading("Diagrama de Flujo", level=1)
     doc.add_paragraph(f"Título del diagrama: {titulo_diagrama}\n")
 
     # 📐 Ajustar tamaño automáticamente
     imagen = Image.open(ruta_png)
     ancho, alto = imagen.size
-    # Ancho máximo permitido dentro del documento (márgenes incluidos)
     ancho_maximo = Inches(6.0)
-    proporcion = ancho_maximo / Inches(ancho / 96)  # 96 dpi estimados
+    proporcion = ancho_maximo / Inches(ancho / 96)
     ancho_ajustado = ancho_maximo if proporcion < 1 else Inches(ancho / 96)
 
     # 📸 Insertar imagen centrada

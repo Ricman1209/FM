@@ -1,27 +1,20 @@
 from docxtpl import DocxTemplate
 from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from prompt.PromptSecciónIntroductoria import Propósito, Ámbito, Audiencia
-from prompt.PromptSecciónIntroductoria import Objetivo, Alcance, Área
-
-def generarSecciónIntroductoria():
+def generarSecciónIntroductoria(datos_intro=None):
     doc = DocxTemplate("templates/FormatoSecciónIntroductoria.docx")
 
     context = {
-        "propósito_documento" : Propósito,
-        "ámbito_documento" : Ámbito,
-        "audiencia_documento" : Audiencia,
-        "objetivo_documento" : Objetivo,
-        "alcance_documento" : Alcance,
-        "area_documento" : Área
+        "propósito_documento": datos_intro.get("propósito", "Propósito no disponible"),
+        "ámbito_documento": datos_intro.get("ámbito", "Ámbito no disponible"),
+        "audiencia_documento": datos_intro.get("audiencia", "Audiencia no disponible"),
+        "objetivo_documento": datos_intro.get("objetivo", "Objetivo no disponible"),
+        "alcance_documento": datos_intro.get("alcance", "Alcance no disponible"),
+        "area_documento": datos_intro.get("área", "Área no disponible")
     }
 
     doc.render(context)
-    doc.save("uploads/FormatoSecciónIntroductoria_automatico.docx")
-
-if __name__ == "__main__":
-    print("🧩 Generando sección introductoria...")
-    generarSecciónIntroductoria()
-    print("✅ Documento generado en: uploads/FormatoSecciónIntroductoria_automatico.docx")
+    output_path = Path("uploads") / "FormatoSecciónIntroductoria_automatico.docx"
+    doc.save(output_path)
+    print(f"✅ Documento generado en: {output_path}")
+    return output_path
