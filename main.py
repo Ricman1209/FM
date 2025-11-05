@@ -21,6 +21,8 @@ def main():
     from utils.GlosarioUtils import generarGlosario
     from utils.SecciónIntroductorioUtils import generarSecciónIntroductoria
     from utils.UnirDocumentosUtils import preparar_y_unir
+    from utils.DiagramaUtils import generar_diagrama_mermaid, insertar_diagrama_en_docx
+
 
     # 1️⃣ Generar portada
     generarPortada()
@@ -33,6 +35,10 @@ def main():
     # 3️⃣ Generar glosario
     generarGlosario()
     print("✅ Glosario generado correctamente.\n")
+
+    ruta_png = generar_diagrama_mermaid()
+    insertar_diagrama_en_docx(ruta_png)
+    print("✅ Diagrama generado e insertado correctamente.\n")
 
     # 4️⃣ Unir todo
     preparar_y_unir()

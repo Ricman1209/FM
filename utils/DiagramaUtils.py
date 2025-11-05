@@ -4,19 +4,14 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 import subprocess
 import os
+from docx import Document
+from docx.shared import Inches
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from PIL import Image
 from prompt.PromptDiagrama import titulo_diagrama, pasos_diagrama
 
 
 def generar_diagrama_mermaid():
-    """
-    Genera un diagrama de flujo con Mermaid a partir de los datos de PromptDiagrama.py.
-    Crea un archivo .mmd, lo convierte a .png y luego elimina el .mmd temporal.
-    """
-
-    if not pasos_diagrama or len(pasos_diagrama) == 0:
-        print("⚠️ No se detectaron pasos en el diagrama.")
-        return None
-
     # 1️⃣ Crear contenido Mermaid dinámico
     contenido = "flowchart TD\n"
     contenido += f'    A[Inicio] --> B["{pasos_diagrama[0]}"]\n'
@@ -38,7 +33,6 @@ def generar_diagrama_mermaid():
     # Guardar .mmd
     with open(ruta_mmd, "w", encoding="utf-8") as f:
         f.write(contenido)
-    #print(f"📄 Archivo Mermaid generado: {ruta_mmd}")
 
     # 3️⃣ Ruta absoluta del ejecutable mmdc.cmd
     ruta_mmdc = r"C:\Users\moral\AppData\Roaming\npm\mmdc.cmd"
@@ -48,31 +42,59 @@ def generar_diagrama_mermaid():
         print("➡️ Ejecuta: npm install -g @mermaid-js/mermaid-cli")
         return None
 
-    # 4️⃣ Ejecutar el comando a través de cmd.exe
+    # 4️⃣ Ejecutar Mermaid CLI
     try:
-        comando = [
-            "cmd", "/c",
-            ruta_mmdc, "-i", str(ruta_mmd), "-o", str(ruta_png)
-        ]
+        comando = ["cmd", "/c", ruta_mmdc, "-i", str(ruta_mmd), "-o", str(ruta_png)]
         subprocess.run(comando, check=True)
-        #print(f"✅ Imagen PNG generada: {ruta_png}")
-
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
         print("❌ Error al generar el diagrama con Mermaid CLI:", e)
-        return None
-    except FileNotFoundError:
-        print("❌ No se encontró el ejecutable mmdc.cmd.")
         return None
 
     # 5️⃣ Eliminar el archivo .mmd temporal
     try:
         os.remove(ruta_mmd)
-        #print(f"🗑️ Archivo temporal eliminado: {ruta_mmd.name}")
     except Exception as e:
         print(f"⚠️ No se pudo eliminar el archivo temporal: {e}")
 
     return ruta_png
 
 
+def insertar_diagrama_en_docx(ruta_png):
+    """
+    Crea un documento Word con la imagen del diagrama ajustada automáticamente.
+    """
+    if not ruta_png or not Path(ruta_png).exists():
+        print("❌ No se encontró la imagen PNG para insertar.")
+        return None
+
+    # 📄 Crear documento
+    doc = Document()
+    doc.add_heading("Diagrama de Flujo", level=1)
+    doc.add_paragraph(f"Título del diagrama: {titulo_diagrama}\n")
+
+    # 📐 Ajustar tamaño automáticamente
+    imagen = Image.open(ruta_png)
+    ancho, alto = imagen.size
+    # Ancho máximo permitido dentro del documento (márgenes incluidos)
+    ancho_maximo = Inches(6.0)
+    proporcion = ancho_maximo / Inches(ancho / 96)  # 96 dpi estimados
+    ancho_ajustado = ancho_maximo if proporcion < 1 else Inches(ancho / 96)
+
+    # 📸 Insertar imagen centrada
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = p.add_run()
+    run.add_picture(str(ruta_png), width=ancho_ajustado)
+
+    # 💾 Guardar resultado
+    ruta_docx = Path("uploads") / "diagrama.docx"
+    doc.save(ruta_docx)
+    print(f"✅ Documento Word generado con el diagrama ajustado: {ruta_docx}")
+
+    return ruta_docx
+
+
 if __name__ == "__main__":
-    generar_diagrama_mermaid()
+    ruta_png = generar_diagrama_mermaid()
+    if ruta_png:
+        insertar_diagrama_en_docx(ruta_png)

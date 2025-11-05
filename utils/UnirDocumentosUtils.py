@@ -24,6 +24,7 @@ def unir_documentos(output_name="manual_final.docx"):
         uploads_path / "portada_automatica.docx",
         uploads_path / "FormatoSecciónIntroductoria_automatico.docx",
         templates_path / "Manual.docx",
+         uploads_path / "diagrama.docx",
         uploads_path / "glosario_automatico.docx",
         #aqui se podra agregar los otros?
     ]

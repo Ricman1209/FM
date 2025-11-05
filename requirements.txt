@@ -9,11 +9,13 @@ httpx
 python-docx
 docxtpl
 docxcompose
+pillow
 
 PyPDF2
 PyMuPDF
 pypandoc
 python-multipart # lee y decodifica los archivos enviados
+
 
 diagrams
 #npm install -g @mermaid-js/mermaid-cli
