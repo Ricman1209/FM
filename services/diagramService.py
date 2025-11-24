@@ -25,12 +25,16 @@ def generar_diagrama_mermaid():
 
     # 1️⃣ Crear contenido Mermaid dinámico
     contenido = "flowchart TD\n"
-    contenido += f'    A[Inicio] --> B["{pasos_diagrama[0]}"]\n'
+    first_label = pasos_diagrama[0].replace('"', "'").replace('\n', ' ')
+    contenido += f'    A[Inicio] --> B["{first_label}"]\n'
 
     for i in range(1, len(pasos_diagrama)):
         letra_anterior = chr(66 + (i - 1))
         letra_actual = chr(66 + i)
-        contenido += f'    {letra_anterior}["{pasos_diagrama[i-1]}"] --> {letra_actual}["{pasos_diagrama[i]}"]\n'
+        # Sanitize labels to prevent Mermaid syntax errors
+        label_prev = pasos_diagrama[i-1].replace('"', "'").replace('\n', ' ')
+        label_curr = pasos_diagrama[i].replace('"', "'").replace('\n', ' ')
+        contenido += f'    {letra_anterior}["{label_prev}"] --> {letra_actual}["{label_curr}"]\n'
 
     contenido += f'    {chr(66 + len(pasos_diagrama) - 1)} --> Z[Fin]\n'
 

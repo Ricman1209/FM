@@ -13,6 +13,7 @@ def generarSecciónIntroductoria(datos_intro=None):
         "area_documento": datos_intro.get("área", "Área no disponible")
     }
 
+    print(f"🔍 Contexto para docxtpl: {context}")
     doc.render(context)
     output_path = Path("uploads") / "FormatoSecciónIntroductoria_automatico.docx"
     doc.save(output_path)

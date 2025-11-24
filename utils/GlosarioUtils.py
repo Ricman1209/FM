@@ -25,6 +25,7 @@ def generarGlosario(glosario_data=None):
         doc = DocxTemplate("templates/FormatoGlosario.docx")
 
         # Contexto para la plantilla
+        print(f"🔍 Datos del glosario a renderizar: {glosario_data}")
         context = {
             "glosario": glosario_data
         }

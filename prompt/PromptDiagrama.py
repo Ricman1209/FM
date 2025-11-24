@@ -41,9 +41,17 @@ def generar_datos_diagrama():
 
     # Intentar decodificar JSON de respuesta
     try:
-        datos_diagrama = json.loads(response.message.content)
-    except Exception:
-        print("⚠️ No se pudo decodificar el JSON, usando valores por defecto.")
+        raw = response.message.content
+        # Buscar bloque JSON entre llaves
+        match = re.search(r"\{.*\}", raw, re.DOTALL)
+        if match:
+            json_text = match.group(0)
+            datos_diagrama = json.loads(json_text)
+        else:
+            # Fallback si no encuentra llaves, intentar parsear todo (aunque probablemente falle)
+            datos_diagrama = json.loads(raw)
+    except Exception as e:
+        print(f"⚠️ No se pudo decodificar el JSON ({e}), usando valores por defecto.")
         datos_diagrama = {"titulo": "Proceso", "pasos": []}
 
     titulo_diagrama = datos_diagrama.get("titulo", "Proceso sin título")

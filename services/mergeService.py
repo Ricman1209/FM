@@ -25,7 +25,7 @@ def unir_documentos(output_name="manual_final.docx"):
         uploads_path / "FormatoSecciónIntroductoria_automatico.docx",
         templates_path / "Manual.docx",
          uploads_path / "diagrama.docx",
-        uploads_path / "glosario_automatico.docx",
+        uploads_path / "glosario_automatico.docx", 
         #aqui se podra agregar los otros?
     ]
 
@@ -65,8 +65,8 @@ def unir_documentos(output_name="manual_final.docx"):
                 print(f"🧹 Eliminado: {path.name}")
             except Exception as e:
                 print(f"⚠️ No se pudo eliminar {path.name}: {e}")
-        elif path.name == "Manual.docx":
-            print(f"🗂 Conservado: {path.name}")
+      #  elif path.name == "Manual.docx":
+       #     print(f"🗂 Conservado: {path.name}")
 
     return final_path
 

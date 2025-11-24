@@ -1,4 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi.responses import FileResponse
 from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).resolve().parent.parent))
@@ -31,3 +32,23 @@ async def subirGenerarManual(file: UploadFile = File(...)):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al subir o procesar el archivo: {str(e)}")
+
+@router.get("/download")
+async def descargar_manual():
+    try:
+        file_path = Path("uploads/manual_final.docx")
+        if not file_path.exists():
+            # Intentar con ruta absoluta si la relativa falla
+            base_path = Path(__file__).resolve().parent.parent
+            file_path = base_path / "uploads" / "manual_final.docx"
+            
+        if not file_path.exists():
+             raise HTTPException(status_code=404, detail="El archivo manual_final.docx no se encuentra en uploads")
+
+        return FileResponse(
+            path=file_path, 
+            filename="manual_final.docx", 
+            media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al descargar el archivo: {str(e)}")

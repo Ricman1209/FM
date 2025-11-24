@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import sys
+import glob
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from utils.PortadaUtils import generarPortada
@@ -35,6 +36,16 @@ def generarManualCompleto():
             except Exception as e:
                 print(f"⚠️ No se pudo eliminar el manual previo: {e}")
 
+        #limpiar tambien imagenes
+        folder_path = "uploads"
+        png_files = glob.glob(os.path.join(folder_path, "*png"))
+
+        for file in png_files:
+            try:
+                os.remove(file)
+            except:
+                print("no se pudo borrar")     
+    
         # 0️⃣ Asegurar Manual.docx
         subir_manual_automatico()
 
@@ -50,6 +61,14 @@ def generarManualCompleto():
             else:
                 generarSecciónIntroductoria()  # fallback
             print("✅ Sección introductoria generada correctamente.\n")
+            
+            # DEBUG: Verificar si el archivo existe
+            check_path = Path("uploads") / "FormatoSecciónIntroductoria_automatico.docx"
+            if check_path.exists():
+                print(f"🔍 DEBUG: El archivo {check_path} EXISTE.")
+            else:
+                print(f"❌ DEBUG: El archivo {check_path} NO EXISTE después de generar.")
+
         except Exception as e:
             print(f"⚠️ Error en sección introductoria: {e}")
 
@@ -69,12 +88,25 @@ def generarManualCompleto():
         except Exception as e:
             print(f"⚠️ Error en diagrama: {e}")
 
+        folder_original_route = "archivo_original"
+        print(os.path.exists(folder_original_route))
+        words_files = glob.glob(os.path.join(folder_original_route,"*.docx"))
+        print(words_files)
+        for file_original in words_files:
+            try:
+             os.remove(file_original)
+            except:
+             print("error")
+
         # 5️⃣ Unión final
         finalPath = preparar_y_unir()
         print("🎉 Manual completo generado exitosamente en uploads/manual_final.docx")
 
         return {"status": "success", "path": str(finalPath)}
+    
 
     except Exception as e:
         print(f"❌ Error durante la generación del manual: {e}")
         return {"status": "error", "message": str(e)}
+
+
